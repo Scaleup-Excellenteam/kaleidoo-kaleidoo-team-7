@@ -1,7 +1,7 @@
 import torch
 from faster_whisper import WhisperModel
 from sentence_transformers import SentenceTransformer
-from DatabaseManager import DatabaseManager
+import TextProcessor
 
 # Initialize device and model parameters
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -23,12 +23,13 @@ def transcribe_and_save(audio_file):
     segments, info = whisper_model.transcribe(audio_file, beam_size=1)
     transcription = ''.join(segment.text for segment in segments)
 
-    # Encode the transcription to create an embedding
-    embedding = sbert_model.encode([transcription], convert_to_numpy=True)[0]
+    # Initialize the TextProcessor (which uses the centralized DatabaseManager)
+    text_processor = TextProcessor.TextProcessor(model_name='all-MiniLM-L6-v2')
 
-    # Save the transcription and embedding to the database
-    db_manager = DatabaseManager()
-    db_manager.insert_text_and_embedding(transcription, embedding)
-    db_manager.close()
+    # Use the TextProcessor's add_text function to add the transcription and its embedding
+    text_processor.add_text(transcription)
+
+    # Close the database connection
+    text_processor.close()
 
     print(f"Transcription for '{audio_file}' added to the database!")
