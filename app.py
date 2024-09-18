@@ -20,17 +20,15 @@ def submit_form():
             return jsonify({'error': 'No search query provided.'}), 400
 
         best_match = find_best_match(search_text, data, sbert_model, sbert_embeddings, top_k=5)
-        
+
 
 
         prompt = f"""
-        Generate a comprehensive response based on the following:
+        Generate a comprehensive and informative response in the same language as the provided information.
 
-        **Query:** {search_text}
+        Best Match: {best_match}
 
-        **Most Similar SBERT Answer Embedding:** {best_match}
-
-        **Response Format:** Informative and concise.
+        Response Format: Informative and concise in the context of the query: {search_text}.
         """
 
         # Generate the response using the generative AI model
