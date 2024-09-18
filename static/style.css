@@ -23,7 +23,8 @@ h3{
     font-size: 20px;
     color: rgb(7, 7, 7);
     text-align: center;
-    margin-top: 15px;
+    margin: 400px;
+    
 }
 #top-bar {
     background-color: white; 
@@ -47,9 +48,11 @@ h3{
     background-color: var(--color-light);
     border-radius: var(--rad);
     text-align: center;
-    font-size: 1.8rem;
     color: rgb(32, 94, 32);
     font-family: var(--font-fam);
+    font-size: 16px;
+    letter-spacing: 0;
+    line-height: 1.8;
 }
 
 #u85 {
@@ -76,7 +79,7 @@ form {
   position: relative;
   width: 50rem;
   margin: 0 auto;
-  margin-top: 130px;
+  margin-top: 100px;
   background: var(--color-brand);
   border-radius: var(--rad);
   

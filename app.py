@@ -29,12 +29,15 @@ def submit_form():
         Best Match: {best_match}
 
         Response Format: Informative and concise in the context of the query: {search_text}.
+        At the end of the answer, write the title from which the answer was taken.
+
+        If you can't find an answer to a query, write "Sorry, I don't have enough knowledge to answer this for you".    
         """
 
         # Generate the response using the generative AI model
         response = genai_model.generate_content(prompt)
 
-        return jsonify({'message': f'You searched for: {response.text}'})
+        return jsonify({'message': f'{response.text}'})
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
