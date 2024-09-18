@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <title>Tel-Hai Chat Bot</title>
+</head>
+<body>
+    <h1><b>Tel-Hai Chat Bot</b></h1>
+    <div id="top-bar"></div> 
+    
+    <div class="clip_frame grpelem" id="u85">
+        <img class="block" id="u85_img" src="/static/images/header-logoc2.png" alt="" width="115" height="49"> 
+    </div>
+    
+    <form id="search-form" role="search" method="POST" action="/submit">
+        <label for="search">Search for stuff</label>
+        <input id="search" name="search" type="search" placeholder="Search..." autofocus required />
+        <button type="submit">Go</button>    
+    </form>
+    
+    <div id="display-box" class="hidden">
+        <p id="display-text"></p>
+    </div>
+    <h3>By Rami Hana, Lior Silberman, Matan Yakir, Ehsan Ganim, Omer Levi</h3>
+    
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+    
+            fetch('/submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const displayBox = document.getElementById('display-box');
+                const displayText = document.getElementById('display-text');
+                displayText.textContent = data.message;
+                displayBox.classList.remove('hidden');
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        
+    </script>
+    
