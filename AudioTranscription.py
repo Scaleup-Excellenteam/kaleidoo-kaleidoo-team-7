@@ -1,7 +1,9 @@
 import torch
 from faster_whisper import WhisperModel
 from sentence_transformers import SentenceTransformer
-import TextProcessor
+from TextProcessorSingleton import TextProcessorSingleton
+
+text_processor = TextProcessorSingleton.get_instance()
 
 # Initialize device and model parameters
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -22,9 +24,6 @@ def transcribe_and_save(audio_file):
     # Transcribe audio using Whisper
     segments, info = whisper_model.transcribe(audio_file, beam_size=1)
     transcription = ''.join(segment.text for segment in segments)
-
-    # Initialize the TextProcessor (which uses the centralized DatabaseManager)
-    text_processor = TextProcessor.TextProcessor(model_name='all-MiniLM-L6-v2')
 
     # Use the TextProcessor's add_text function to add the transcription and its embedding
     text_processor.add_text(transcription)
