@@ -1,7 +1,10 @@
 import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
-from DatabaseManager import DatabaseManager  # Assuming you have the DatabaseManager class defined elsewhere
+from DatabaseManagerSingelton import DatabaseManagerSingelton
+
+db_manager = DatabaseManagerSingelton.get_instance()
+
 
 class TextProcessor:
     def __init__(self, model_name='all-MiniLM-L6-v2'):
@@ -10,7 +13,7 @@ class TextProcessor:
         """
         # Initialize SBERT model for embedding
         self.sbert_model = SentenceTransformer(model_name)
-        self.db_manager = DatabaseManager()  # Initialize the database manager
+        
 
     def encode_text(self, text):
         """
@@ -37,7 +40,7 @@ class TextProcessor:
 
         # Store texts and embeddings in the database
         for text, embedding in zip(texts, embeddings):
-            self.db_manager.insert_text_and_embedding(text, embedding)
+            db_manager.insert_text_and_embedding(text, embedding)
 
     def add_text(self, text):
         """
@@ -50,7 +53,7 @@ class TextProcessor:
         embedding = self.encode_text(text)
 
         # Store the text and embedding in the database
-        self.db_manager.insert_text_and_embedding(text, embedding)
+        db_manager.insert_text_and_embedding(text, embedding)
 
     def find_best_match(self, query, top_k=1):
         """
@@ -64,7 +67,7 @@ class TextProcessor:
         - List of tuples containing (text, similarity_score).
         """
         # Load current embeddings from the database
-        texts, sbert_embeddings = self.db_manager.get_all_embeddings()
+        texts, sbert_embeddings = db_manager.get_all_embeddings()
 
         # Normalize embeddings for cosine similarity
         sbert_embeddings = sbert_embeddings / np.linalg.norm(sbert_embeddings, axis=1, keepdims=True)
@@ -93,4 +96,4 @@ class TextProcessor:
         """
         Close the database connection.
         """
-        self.db_manager.close()
+        db_manager.close()
