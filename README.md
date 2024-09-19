@@ -1,159 +1,66 @@
-﻿# kaleidoo-kaleidoo-team-7
-![RAG (2)](https://github.com/user-attachments/assets/5a2b11a7-b352-4c56-90f3-6cbb96deb07f)
 
-# **Project Title: Multi-Module Python Application**
+# Tel Hai Study Buddy - Chatbot MVP
 
-### **Table of Contents**
-- [Project Overview](#project-overview)
-- [Modules](#modules)
-    - [app.py](#apppy)
-    - [AudioTranscription.py](#audiotranscriptionpy)
-    - [data_loader.py](#data_loaderpy)
-    - [DatabaseManager.py](#databasemanagerpy)
-    - [DocumentsParser.py](#documentsparserpy)
-    - [TextProcessor.py](#textprocessorpy)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+## Project Overview
 
----
+Tel Hai Study Buddy is a multimodal chatbot designed to assist students at Tel Hai College in accessing lecture materials across various formats (documents, videos, and audio). The project demonstrates the feasibility of such a tool by implementing a Minimum Viable Product (MVP) with core features.
 
-## **Project Overview**
+## Core Features
 
-This project is a multi-functional Python application consisting of several independent but interconnected modules. It provides functionality for:
+- **Multimodal Search**: 
+  Search across documents, videos, and audio files to retrieve relevant lecture materials.
+  
+- **Natural Language Queries**: 
+  Support for natural language input to search for specific topics or materials.
 
-- Loading and processing data
-- Audio transcription using a custom pipeline
-- Managing data through a database manager
-- Parsing and processing documents for key insights
+- **Timestamped Results**: 
+  Provides direct access to relevant portions of video and audio materials.
 
-Each module is designed to handle specific tasks, making it easier to maintain and expand the system for different use cases like natural language processing, database operations, and multimedia handling.
+## Setup Instructions
 
----
+### Requirements
 
-## **Modules**
+- Python 3.8+
+- Required libraries (detailed in `requirements.txt`)
 
-### **1. app.py**
-This is the main entry point for the application. It integrates all modules and orchestrates the workflow across different tasks like data loading, audio transcription, and document parsing.
+### Installation
 
-### **2. AudioTranscription.py**
-Responsible for handling audio input and converting it into text. The module likely includes a transcription pipeline that uses speech-to-text algorithms.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/username/tel-hai-study-buddy.git
+   cd tel-hai-study-buddy
+   ```
 
-**Main features:**
-- Audio input handling
-- Speech-to-text conversion
-- Error handling for transcription process
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### **3. data_loader.py**
-Manages data loading from various sources and formats, ensuring that the data is clean and ready for further processing by other modules.
+3. Run the application:
+   ```bash
+   python app.py
+   ```
 
-**Main features:**
-- Data import from CSV, JSON, and other formats
-- Data validation
-- Preprocessing tasks
+## Folder Structure
 
-### **4. DatabaseManager.py**
-Handles the communication with the underlying database, offering methods to insert, update, delete, and query data.
+- `app.py`: The main Flask application to run the chatbot.
+- `models.py`: Model initialization for text processing and AI-based response generation.
+- `AudioTranscription.py`: Module for audio transcription using Whisper.
+- `VideoTranscription.py`: Video processing and object detection using YOLO.
+- `data_loader.py`: Handles loading of media files for processing.
+- `DatabaseManager.py`: Manages the SQLite database for storing and retrieving embeddings.
+- `TextProcessor.py`: Centralized text processing and search capabilities.
+- `index.html`: Basic interface for interacting with the chatbot.
 
-**Main features:**
-- Database connection management
-- CRUD (Create, Read, Update, Delete) operations
-- SQL queries or NoSQL operations
+## Future Enhancements
 
-### **5. DocumentsParser.py**
-Processes and parses documents, possibly using natural language processing (NLP) techniques to extract key information or perform text analysis.
+- Personalized recommendations.
+- Multi-user support and advanced filtering.
 
-**Main features:**
-- Document parsing
-- Text extraction and preprocessing
-- NLP tasks like tokenization and entity recognition
+## Contributors
 
-### **6. TextProcessor.py**
-Focuses on various text processing functions such as cleaning, tokenizing, and applying machine learning models for text analysis.
-
-**Main features:**
-- Text normalization and tokenization
-- Applying ML models to text
-- Feature extraction for text classification
-
----
-
-## **Installation**
-
-To set up and run this project locally, follow these steps:
-
-1. **Clone the repository:**
-    ```bash
-    git clone https://github.com/yourusername/your-repository.git
-    ```
-2. **Navigate to the project directory:**
-    ```bash
-    cd your-repository
-    ```
-3. **Create a virtual environment (optional but recommended):**
-    ```bash
-    python3 -m venv env
-    source env/bin/activate  # for Windows: env\Scripts\activate
-    ```
-4. **Install the required dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-
----
-
-## **Usage**
-
-### **Running the Main Application:**
-Once you have the project set up, you can run the application by executing `app.py`:
-
-```bash
-python app.py
-```
-
-### **Module-Specific Usage:**
-You can run individual modules for specific tasks:
-
-- **Audio Transcription:**
-    ```bash
-    python AudioTranscription.py
-    ```
-
-- **Data Loader:**
-    ```bash
-    python data_loader.py
-    ```
-
-- **Database Manager:**
-    ```bash
-    python DatabaseManager.py
-    ```
-
-- **Document Parser:**
-    ```bash
-    python DocumentsParser.py
-    ```
-
-- **Text Processor:**
-    ```bash
-    python TextProcessor.py
-    ```
-
----
-
-## **Contributing**
-
-If you'd like to contribute to this project:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -m 'Add new feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a Pull Request.
-
----
-
-## **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- Rami Hana
+- Lior Silberman
+- Omer Levi
+- Matan Yakir
+- Ehsan Ganim
