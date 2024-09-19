@@ -28,7 +28,4 @@ def transcribe_and_save(audio_file):
     # Use the TextProcessor's add_text function to add the transcription and its embedding
     text_processor.add_text(transcription)
 
-    # Close the database connection
-    text_processor.close()
-
     print(f"Transcription for '{audio_file}' added to the database!")
