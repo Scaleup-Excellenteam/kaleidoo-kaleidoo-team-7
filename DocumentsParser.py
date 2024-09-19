@@ -164,65 +164,93 @@ def extract_text_pptx(
 
 ###################### for docs 
 
-def extract_text_docx(
-    file_path: str,
-    output_txt: Optional[str] = None,
-    codec: str = 'utf-8'
-) -> Optional[str]:
-    """
-    Extracts text from a Word (.docx) file and optionally saves it to a text file.
-    Each paragraph is formatted as a single line in the specified format.
+# def extract_text_docx(
+#     file_path: str,
+#     output_txt: Optional[str] = None,
+#     codec: str = 'utf-8'
+# ) -> Optional[str]:
+#     """
+#     Extracts text from a Word (.docx) file and optionally saves it to a text file.
+#     Each paragraph is formatted as a single line in the specified format.
 
-    Parameters:
-        file_path (str): The path to the Word file.
-        output_txt (Optional[str]): The path to save the extracted text as a .txt file. If None, the text is not saved to a file.
-        codec (str): The codec to use for text encoding. Defaults to 'utf-8'.
+#     Parameters:
+#         file_path (str): The path to the Word file.
+#         output_txt (Optional[str]): The path to save the extracted text as a .txt file. If None, the text is not saved to a file.
+#         codec (str): The codec to use for text encoding. Defaults to 'utf-8'.
 
-    Returns:
-        Optional[str]: The concatenated formatted text if successful, else None.
-    """
-    try:
-        # Ensure the file exists
-        if not os.path.isfile(file_path):
-            print(f"The file '{file_path}' does not exist.")
-            return None
+#     Returns:
+#         Optional[str]: The concatenated formatted text if successful, else None.
+#     """
+#     try:
+#         # Ensure the file exists
+#         if not os.path.isfile(file_path):
+#             print(f"The file '{file_path}' does not exist.")
+#             return None
 
-        # Extract the title from the file name
-        title = os.path.basename(file_path)
+#         # Extract the title from the file name
+#         title = os.path.basename(file_path)
 
-        # Open the Word file
-        doc = Document(file_path)
-        formatted_text = ""
+#         # Open the Word file
+#         doc = Document(file_path)
+#         formatted_text = ""
 
-        # Iterate through each paragraph and extract text
-        for para_num, para in enumerate(doc.paragraphs, start=1):
-            para_text = para.text.strip()
-            if para_text:  # Only include non-empty paragraphs
-                formatted_entry = f"Title: {title} | Page: {para_num} | Content: {para_text}"
+#         # Iterate through each paragraph and extract text
+#         for para_num, para in enumerate(doc.paragraphs, start=1):
+#             para_text = para.text.strip()
+#             if para_text:  # Only include non-empty paragraphs
+#                 formatted_entry = f"Title: {title} | Page: {para_num} | Content: {para_text}"
+#                 text_processor.add_text(formatted_entry)
+#                 formatted_text += formatted_entry + "\n"
+
+#         if not formatted_text.strip():
+#             print(f"No text could be extracted from '{file_path}'.")
+#             return None
+
+#         # Save the formatted text to a .txt file if output_txt path is provided
+#         if output_txt:
+#             try:
+#                 with open(output_txt, 'w', encoding=codec) as f:
+#                     f.write(formatted_text)
+#                 print(f"Extracted text saved to '{output_txt}'.")
+#             except IOError as e:
+#                 print(f"Failed to save text to '{output_txt}': {e}")
+#                 return None
+
+#         return formatted_text
+
+#     except FileNotFoundError:
+#         print(f"File {file_path} not found.")
+#     except Exception as e:
+#         print(f"An error occurred while extracting text from Word document: {e}")
+#     return None
+
+def extract_text_docx(doc_path):
+    doc = Document(doc_path)
+    formatted_entries = []
+    slide_num = 1
+    current_title = ""
+    current_content = ""
+    # Extract the file name without extension to use as Title
+    title = os.path.basename(doc_path)
+    for para in doc.paragraphs:
+        if para.style.name.startswith('Heading 1'):
+            if current_title:
+                # Format the current entry and add it to the list
+                formatted_entry = f"Title: {title} | Page: {slide_num} | Content: {current_content.strip()}"
                 text_processor.add_text(formatted_entry)
-                formatted_text += formatted_entry + "\n"
-
-        if not formatted_text.strip():
-            print(f"No text could be extracted from '{file_path}'.")
-            return None
-
-        # Save the formatted text to a .txt file if output_txt path is provided
-        if output_txt:
-            try:
-                with open(output_txt, 'w', encoding=codec) as f:
-                    f.write(formatted_text)
-                print(f"Extracted text saved to '{output_txt}'.")
-            except IOError as e:
-                print(f"Failed to save text to '{output_txt}': {e}")
-                return None
-
-        return formatted_text
-
-    except FileNotFoundError:
-        print(f"File {file_path} not found.")
-    except Exception as e:
-        print(f"An error occurred while extracting text from Word document: {e}")
-    return None
+                formatted_entries.append(formatted_entry)
+                slide_num += 1
+                current_content = ""
+            current_title = para.text
+        else:
+            current_content += para.text + " "
+    # Add the last entry if exists
+    if current_title:
+        formatted_entry = f"Title: {current_title} | Page: {slide_num} | Content: {current_content.strip()}"
+        formatted_entries.append(formatted_entry)
+    # Combine all entries into a single string separated by newline characters
+    all_entries = "\n".join(formatted_entries)
+    return all_entries
 
 
 # Supported image formats

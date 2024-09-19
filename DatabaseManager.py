@@ -106,6 +106,7 @@ class DatabaseManager:
         try:
             self.clear_table('embeddings')
             self.clear_table('texts')
+
             print("All tables have been cleared.")
         except sqlite3.Error as e:
             print(f"An error occurred while clearing all tables: {e}")
@@ -120,3 +121,7 @@ class DatabaseManager:
                 print(row)
         except sqlite3.Error as e:
             print(f"An error occurred: {e}")
+
+
+# data = DatabaseManager()
+# data.clear_all_tables()
