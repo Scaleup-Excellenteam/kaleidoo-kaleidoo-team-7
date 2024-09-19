@@ -14,10 +14,9 @@ from docx.enum.text import WD_BREAK
 from typing import Optional, List
 import fitz  # PyMuPDF for PDF processing
 from pprint import pprint
+from TextProcessorSingleton import TextProcessorSingleton
 
-import TextProcessor
-textPro = TextProcessor.TextProcessor()
-
+text_processor = TextProcessorSingleton.get_instance()
 # Ensure consistent language detection
 DetectorFactory.seed = 0
 
@@ -90,7 +89,7 @@ def extract_text_pymupdf(
             # Replace newline characters with spaces to make the page text a single line
             single_line_text = ' '.join(page_text.splitlines()).strip()
             formatted_entry = f"Title: {title} | Page: {page_num + 1} | Content: {single_line_text}"
-            textPro.add_text(formatted_entry)
+            text_processor.add_text(formatted_entry)
             formatted_text += formatted_entry + "\n"
 
         if not formatted_text.strip():
@@ -144,7 +143,7 @@ def extract_text_pptx(
             # Combine all text runs into a single line
             single_line_text = ' '.join(slide_text_runs).strip()
             formatted_entry = f"Title: {title} | Page: {slide_num} | Content: {single_line_text}"
-            textPro.add_text(formatted_entry)
+            text_processor.add_text(formatted_entry)
             formatted_text += formatted_entry + "\n"
 
         if not formatted_text.strip():
@@ -198,7 +197,7 @@ def extract_text_docx(
             para_text = para.text.strip()
             if para_text:  # Only include non-empty paragraphs
                 formatted_entry = f"Title: {title} | Page: {para_num} | Content: {para_text}"
-                textPro.add_text(formatted_entry)
+                text_processor.add_text(formatted_entry)
                 formatted_text += formatted_entry + "\n"
 
         if not formatted_text.strip():
@@ -283,7 +282,7 @@ def extract_text_from_image(file_path):
         # Format the extracted text
         title = os.path.basename(file_path)
         formatted_text = f"Title: {title} | Content: {text}"
-        textPro.add_text(formatted_text)
+        text_processor.add_text(formatted_text)
         return formatted_text
     else:
         print(f"Unsupported file type: {file_extension}")
@@ -320,17 +319,3 @@ def extract_text_from_file(file_path):
     else:
         print(f"Unsupported file type: {file_extension}")
         return "", "unsupported"
-
-
-uploaded = ['/Users/ramihanna/GitHub/kaleidoo-kaleidoo-team-7/Reaserch - Development - Deploment.docx']
-
-# Process all uploaded files
-for idx, filename in enumerate(uploaded):
-    print(f"Processing File {idx + 1}/{len(uploaded)}: {filename}")
-    try:
-        text, file_type = extract_text_from_file(filename)
-        if not text:
-            print(f"Error processing, No text found")
-
-    except Exception as e:
-        print(f"Error processing {filename}: {e}")
