@@ -1,20 +1,21 @@
-# data_loader.py
-import json
-from models import sbert_model
+import os
+from DocumentsParser import extract_text_from_file
 
-# Load data from JSON file
-with open('data.json', 'r', encoding='utf-8') as file:
-    json_data = json.load(file)
 
-data = []
-for item in json_data:
-    title = item['title']
-    page = item['data']['page']
-    content = item['data']['content']
-    
-    # Combine title, page, and content into a single string
-    formatted_text = f"Title: {title} | Page: {str(page)} | Content: {content}"
-    data.append(formatted_text)
+DOCS_DIRECTORY = './docs'
 
-# Compute SBERT embeddings
-sbert_embeddings = sbert_model.encode(data, convert_to_numpy=True)
+# List all files in the directory
+uploaded = [os.path.join(DOCS_DIRECTORY, filename) for filename in os.listdir(DOCS_DIRECTORY) if filename.endswith(('.docx', '.pdf', '.txt', '.pptx'))]
+
+# Process all uploaded files
+for idx, filename in enumerate(uploaded):
+    print(f"Processing File {idx + 1}/{len(uploaded)}: {filename}")
+    try:
+        text, file_type = extract_text_from_file(filename)
+        if not text:
+            print(f"Error processing {filename}: No text found")
+        else:
+            print(f"Successfully processed {filename}: {len(text)} characters extracted")
+
+    except Exception as e:
+        print(f"Error processing {filename}: {e}")
