@@ -1,6 +1,8 @@
 import sqlite3
 import numpy as np
 from sentence_transformers import SentenceTransformer
+
+
 class DatabaseManager:
     def __init__(self, db_path='application_data.db'):
         """
@@ -10,6 +12,7 @@ class DatabaseManager:
         self.conn = sqlite3.connect(self.db_path)
         self.cursor = self.conn.cursor()
         self.create_tables()
+
 
     def create_tables(self):
         """
@@ -66,10 +69,16 @@ class DatabaseManager:
         """
         Retrieve all texts and embeddings from the database.
         """
-        self.cursor.execute('SELECT text, embedding FROM texts JOIN embeddings ON texts.id = embeddings.id')
-        rows = self.cursor.fetchall()
-        texts = [row[0] for row in rows]
-        embeddings = np.array([np.frombuffer(row[1], dtype=np.float32) for row in rows])
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        try:
+            cursor.execute('SELECT text, embedding FROM texts JOIN embeddings ON texts.id = embeddings.id')
+            rows = cursor.fetchall()
+            texts = [row[0] for row in rows]
+            embeddings = np.array([np.frombuffer(row[1], dtype=np.float32) for row in rows])
+        finally:
+            cursor.close()
+            conn.close()
         return texts, embeddings
 
 
