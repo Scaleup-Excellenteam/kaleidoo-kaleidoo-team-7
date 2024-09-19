@@ -1,15 +1,31 @@
+import os
 import logging
 from flask import Flask, request, jsonify, render_template
 from config import Config
 from models import sbert_model, genai_model
-# from utils import find_best_match
-from TextProcessor import text_processor
+from TextProcessorSingleton import TextProcessorSingleton
 
-# Initialize logging
+# Create logs directory if it doesn't exist
+if not os.path.exists('logs'):
+    os.makedirs('logs')
+
+# Initialize the main logger
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s: %(message)s', handlers=[
-    logging.FileHandler("app.log"),
+    logging.FileHandler("logs/app.log"),
     logging.StreamHandler()
 ])
+
+# Create a new logger for token count
+token_count_logger = logging.getLogger('token_count_logger')
+token_count_handler = logging.FileHandler('logs/token_count.log')
+token_count_handler.setLevel(logging.INFO)
+token_count_formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s')
+token_count_handler.setFormatter(token_count_formatter)
+
+# Add the token count handler to the logger
+token_count_logger.addHandler(token_count_handler)
+
+text_processor = TextProcessorSingleton.get_instance()
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -48,9 +64,16 @@ def submit_form():
 
         # Generate the response using the generative AI model
         response = genai_model.generate_content(prompt)
-        logging.debug(f"Generated response: {response} | Best match: {best_match}")
+        logging.debug(f"Generated response: {response.text} | Best match: {best_match}")
 
-        return jsonify({'message': response})
+        # Log token count separately
+        input_tokens = len(prompt.split())  # Example for counting tokens
+        response_tokens = len(response.text.split())  # Example for counting tokens
+        total_tokens = input_tokens + response_tokens
+
+        token_count_logger.info(f"Input Tokens: {input_tokens}, Response Tokens: {response_tokens}, Total Tokens: {total_tokens}")
+
+        return jsonify({'message': response.text})
 
     except Exception as e:
         logging.error(f"An error occurred: {str(e)}", exc_info=True)
