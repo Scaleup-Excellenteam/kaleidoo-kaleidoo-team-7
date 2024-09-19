@@ -16,7 +16,9 @@ import fitz  # PyMuPDF for PDF processing
 from pprint import pprint
 from TextProcessorSingleton import TextProcessorSingleton
 
+
 text_processor = TextProcessorSingleton.get_instance()
+
 # Ensure consistent language detection
 DetectorFactory.seed = 0
 
@@ -319,3 +321,4 @@ def extract_text_from_file(file_path):
     else:
         print(f"Unsupported file type: {file_extension}")
         return "", "unsupported"
+
