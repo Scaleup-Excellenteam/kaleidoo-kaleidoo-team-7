@@ -10,7 +10,6 @@ from docx import Document
 from pdfminer.high_level import extract_text
 from PyPDF2 import PdfReader
 import arabic_reshaper
-from bidi.algorithm import get_display
 from docx.enum.text import WD_BREAK
 from typing import Optional, List
 import fitz  # PyMuPDF for PDF processing
