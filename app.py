@@ -31,9 +31,14 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 @app.route('/')
+def login():
+    return render_template('login.html')
+
+@app.route('/home')
 def home():
     logging.info("Home page accessed")
     return render_template('index.html')
+
 
 @app.route('/submit', methods=['POST'])
 def submit_form():

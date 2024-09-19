@@ -26,6 +26,26 @@ h3{
     margin: 400px;
     
 }
+
+#logout {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  position: absolute;
+  top: 10px; 
+  left: 10px; 
+  font-size: 17px;
+  color: #000;
+  text-decoration: none;
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+#logout:hover {
+  background-color: #ccc;
+  color: #333;
+}
+
 #top-bar {
     background-color: white; 
     height: 70px;
